@@ -1,3 +1,6 @@
+#other
+output*.json
+
 # mac junk
 .DS_Store
 
