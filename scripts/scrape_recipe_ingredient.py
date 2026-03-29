@@ -1,8 +1,14 @@
 import requests
 from bs4 import BeautifulSoup
 import json
+from pathlib import Path
 from urllib.parse import urljoin
 import time
+
+try:
+    from ingredient_parser import parse_ingredient_text
+except ModuleNotFoundError:
+    from scripts.ingredient_parser import parse_ingredient_text
 
 BASE_URL = "https://minimalistbaker.com/recipe-index/"
 RECIPE_LINK_SELECTOR = "h3.post-summary__title a" 
@@ -13,6 +19,8 @@ ingredient_to_id = {}
 id_to_ingredient = {}
 next_ingredient_id = 1
 recipes_data = []
+parsed_recipes_data = []
+SCRIPT_DIR = Path(__file__).resolve().parent
 
 def get_html(url):
     headers = {
@@ -37,7 +45,7 @@ def parse_index(html):
             links.append(href)
     return set(links)
 
-def parse_recipe(html):
+def parse_recipe(html, source_url):
     global next_ingredient_id
     soup = BeautifulSoup(html, 'html.parser')
     
@@ -47,22 +55,34 @@ def parse_recipe(html):
 
     title = title_elem.get_text(strip=True)
     ingredient_ids = []
+    parsed_ingredients = []
 
     for item in soup.select(INGREDIENT_SELECTOR):
-        ing_text = item.get_text(strip=True).lower()
+        ing_text = item.get_text(" ", strip=True)
         if not ing_text:
             continue
-            
-        if ing_text not in ingredient_to_id:
-            ingredient_to_id[ing_text] = next_ingredient_id
-            id_to_ingredient[next_ingredient_id] = ing_text
+
+        parsed_ingredient = parse_ingredient_text(ing_text)
+        normalized_text = parsed_ingredient["text"].lower()
+        if not normalized_text:
+            continue
+
+        if normalized_text not in ingredient_to_id:
+            ingredient_to_id[normalized_text] = next_ingredient_id
+            id_to_ingredient[next_ingredient_id] = parsed_ingredient
             next_ingredient_id += 1
-            
-        ingredient_ids.append(ingredient_to_id[ing_text])
+
+        ingredient_ids.append(ingredient_to_id[normalized_text])
+        parsed_ingredients.append(parsed_ingredient)
 
     recipes_data.append({
         "name": title,
         "ingredients": ingredient_ids
+    })
+    parsed_recipes_data.append({
+        "name": title,
+        "source_url": source_url,
+        "ingredients": parsed_ingredients
     })
 
 def main():
@@ -97,7 +117,7 @@ def main():
         full_url = urljoin(BASE_URL, link)
         recipe_html = get_html(full_url)
         if recipe_html:
-            parse_recipe(recipe_html)
+            parse_recipe(recipe_html, full_url)
         time.sleep(1)
         count += 1
 
@@ -106,8 +126,11 @@ def main():
         "recipes": recipes_data
     }
 
-    with open('output2.json', 'w', encoding='utf-8') as f:
+    with open(SCRIPT_DIR / 'output2.json', 'w', encoding='utf-8') as f:
         json.dump(output, f, indent=4, ensure_ascii=False)
+
+    with open(SCRIPT_DIR / 'parsed_recipes.json', 'w', encoding='utf-8') as f:
+        json.dump({"recipes": parsed_recipes_data}, f, indent=4, ensure_ascii=False)
 
 if __name__ == "__main__":
     main()
