@@ -4,7 +4,8 @@ from pathlib import Path
 SCRIPT_DIR = Path(__file__).resolve().parent
 DATA_PATH = SCRIPT_DIR / "data" / "parsed_recipes.json"
 
-# returns a list of recipe objects that match the user's ingredients
+"""returns a list of recipes sorted by most number of ingredients 
+matched to least amount of ingredients matched. """
 def match_recipes(user_ingredients) :
 
     matched_recipes = []
@@ -13,23 +14,22 @@ def match_recipes(user_ingredients) :
         data = json.load(f)
 
     for recipe in data["recipes"]:
-        all_ingredients_matched = True
-        
+        match_count = 0
+
         for ingredient in recipe["ingredients"]:
             ingredient_name = ingredient["name"].lower()
             
-            # Check if ANY user ingredient matches this recipe ingredient
-            found_match = False
             for user_ing in user_ingredients:
                 if user_ing.lower() in ingredient_name:
-                    found_match = True
+                    match_count += 1
                     break
             
-            if not found_match:
-                all_ingredients_matched = False
-                break
-        
-        if all_ingredients_matched:
-            matched_recipes.append(recipe)
+        if match_count > 0: # only append if there's more than one matched ingredient
+            matched_recipes.append({
+                "name": recipe["name"],
+                "match_count": match_count,
+                "recipe": recipe
+            })
 
+    matched_recipes.sort(key=lambda x: x["match_count"], reverse=True)
     return matched_recipes
