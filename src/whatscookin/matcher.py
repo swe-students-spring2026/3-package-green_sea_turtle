@@ -25,11 +25,16 @@ def match_recipes(user_ingredients, recipes) :
     for recipe in recipes:
         match_count = 0
 
-        for ingredient in recipe["ingredients"]:
-            ingredient_name = ingredient["name"].lower()
-            
-            for user_ing in user_ingredients:
-                if user_ing.lower() in ingredient_name:
+        for user_ing in user_ingredients:
+
+            for ingredient in recipe["ingredients"]:
+                ingredient_name = ingredient["name"].lower()
+                
+                if user_ing.lower() in "eggs" and user_ing in ingredient_name:
+                    if "eggplant" not in ingredient_name and "veggie" not in ingredient_name: # specifically check for eggs in the word eggplant
+                        match_count += 1
+                        break
+                elif user_ing.lower() in ingredient_name:
                     match_count += 1
                     break
             
