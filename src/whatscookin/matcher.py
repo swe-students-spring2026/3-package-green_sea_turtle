@@ -40,6 +40,7 @@ def match_recipes(user_ingredients, recipes) :
             
         if match_count > 0: # only append if there's more than one matched ingredient
             matched_recipes.append({
+                "id": recipe["id"],    
                 "name": recipe["name"],
                 "match_count": match_count,
                 "recipe": recipe
