@@ -1,6 +1,5 @@
 import re
 
-
 UNIT_PATTERN = (
     r"cups?|cup|tbsp|tablespoons?|tsp|teaspoons?|oz|ounces?|lb|lbs|pounds?|"
     r"g|grams?|kg|ml|l|liters?|litres?|pinch|pinches|dash|dashes|cloves?|"
@@ -24,19 +23,16 @@ LEADING_UNIT_RE = re.compile(
 
 PAREN_RE = re.compile(r"\([^()]*\)")
 
-
 def normalize_text(text):
     text = text.replace("\u00bd", "1/2").replace("\u00bc", "1/4").replace("\u00be", "3/4")
     text = re.sub(r"\s+", " ", text.replace("\n", " "))
     return text.strip()
-
 
 def extract_notes(text):
     notes = [match.group(0).strip() for match in PAREN_RE.finditer(text)]
     cleaned = PAREN_RE.sub(" ", text)
     cleaned = re.sub(r"\s+", " ", cleaned).strip()
     return cleaned, " ".join(notes).strip()
-
 
 def parse_ingredient_text(text):
     normalized = normalize_text(text)

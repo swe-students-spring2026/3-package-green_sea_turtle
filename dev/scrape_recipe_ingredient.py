@@ -8,7 +8,7 @@ import time
 try:
     from ingredient_parser import parse_ingredient_text
 except ModuleNotFoundError:
-    from scripts.ingredient_parser import parse_ingredient_text
+    from dev.ingredient_parser import parse_ingredient_text
 
 BASE_URL = "https://minimalistbaker.com/recipe-index/"
 RECIPE_LINK_SELECTOR = "h3.post-summary__title a" 
