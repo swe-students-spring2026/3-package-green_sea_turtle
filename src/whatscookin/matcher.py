@@ -4,16 +4,25 @@ from pathlib import Path
 SCRIPT_DIR = Path(__file__).resolve().parent
 DATA_PATH = SCRIPT_DIR / "data" / "parsed_recipes.json"
 
+def load_recipes(data_path=DATA_PATH):
+    with open(data_path, "r", encoding="utf-8") as f:
+        data = json.load(f)
+
+    recipes = data["recipes"]
+
+    # add id field to each recipe for easy lookup
+    for i, recipe in enumerate(recipes):
+        recipe["id"] = i + 1
+
+    return recipes
+
 """returns a list of recipes sorted by most number of ingredients 
 matched to least amount of ingredients matched. """
-def match_recipes(user_ingredients) :
+def match_recipes(user_ingredients, recipes) :
 
     matched_recipes = []
 
-    with open(DATA_PATH, "r") as f:
-        data = json.load(f)
-
-    for recipe in data["recipes"]:
+    for recipe in recipes:
         match_count = 0
 
         for ingredient in recipe["ingredients"]:
