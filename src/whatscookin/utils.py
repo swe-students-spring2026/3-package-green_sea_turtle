@@ -8,7 +8,6 @@ def random_recipe(recipes, seed=None):
     return rng.choice(recipes)
 
 def missing_ingredients(user_ingredients, recipe):
-
     if "ingredients" not in recipe:
         raise ValueError("Invalid recipe format: missing 'ingredients' field")
     recipe_ings = [ing["name"].lower() for ing in recipe["ingredients"]]
