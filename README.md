@@ -90,3 +90,7 @@ whatscookin random
 ##### Output:
 
 Spicy Peanut Noodles (ID: 212)
+
+### Contact
+
+For any questions, please contact: [Joy Song](https://github.com/pancake0003), [Marcus Song](https://github.com/Marcious), [Luke Sribhud](https://github.com/LukeySan), [Suri Su](https://github.com/suri-zip), and [Anish Susarla](https://github.com/anishs37). 
