@@ -19,7 +19,7 @@ def main():
     
     print(f"\nTop{min(10,len(matches))} matching recipes:")
     for i, item in enumerate(matches[:10], start=1):
-        print(f"{1}, {item['name']} ({item['match_count']} ingredient matches)")
+        print(f"{i}. {item['name']} ({item['match_count']} ingredient matches)")
 
 if __name__ =="__main__":
     main()
