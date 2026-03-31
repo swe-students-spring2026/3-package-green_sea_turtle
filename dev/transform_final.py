@@ -101,8 +101,6 @@ def main():
 
     with open('final_output.json', 'w', encoding='utf-8') as f:
         json.dump(final_output, f, indent=4, ensure_ascii=False)
-    
-    print(f"Reduced {len(old_map)} messy ingredients down to {len(final_ingredient_map)} clean ingredients!")
 
 if __name__ == "__main__":
     main()

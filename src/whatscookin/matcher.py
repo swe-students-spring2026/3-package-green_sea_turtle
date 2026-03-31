@@ -19,7 +19,6 @@ def load_recipes(data_path=DATA_PATH):
 """returns a list of recipes sorted by most number of ingredients 
 matched to least amount of ingredients matched. """
 def match_recipes(user_ingredients, recipes) :
-
     matched_recipes = []
 
     for recipe in recipes:
