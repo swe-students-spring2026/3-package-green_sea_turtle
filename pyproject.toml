@@ -16,6 +16,9 @@ classifiers = [
     "Operating System :: OS Independent",
 ]
 
+[project.scripts]
+whatscookin = "whatscookin.__main__:main"
+
 [project.optional-dependencies]
 dev = ["pytest"]
 

@@ -32,7 +32,7 @@ def main():
     
         print(f"\nTop{min(10,len(matches))} matching recipes:")
         for i, item in enumerate(matches[:10], start=1):
-            print(f"{i}, {item['name']} ({item['match_count']} ingredient matches)")
+            print(f"ID: {item['id']} | Name: {item['name']}, ({item['match_count']} ingredient matches)")
 
     # === details ===
     elif command == "details":

@@ -10,6 +10,21 @@ WhatsCookin is a Python package that interfaces with the command-line tool to so
 pip install WhatsCookin
 ```
 
+#### Local Dev Installation
+Clone the repository and install dependencies using pipenv:
+```bash
+python3 -m pip install pipenv
+python3 -m pipenv install --dev
+```
+Activate the environment:
+`python3 -m pipenv shell`
+
+Run tests:
+`pytest`
+
+Build the package:
+`python3 -m build`
+
 ### Usage
 
 #### 1. Find Recipes
